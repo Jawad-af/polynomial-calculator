@@ -18,7 +18,21 @@ public class PolyOperationsImplementation implements PolyOperations {
         Monomial monomial1 = itr1.hasNext() ? itr1.next().getValue() : null;
         Monomial monomial2 = itr2.hasNext() ? itr2.next().getValue() : null;
 
-        while (itr1.hasNext() || itr2.hasNext()) {
+        if (p1.getHigherDegree() > p2.getHigherDegree()) {
+            while (itr2.hasNext()) {
+                Monomial term = itr2.next().getValue();
+                if (p1.getTerms().containsKey(term.getExpo())) {
+
+                }
+//                StringBuilder pattern = new StringBuilder();
+//                pattern.append(term.getCoeff());
+//                pattern.append(term.getVar());
+//                pattern.append(term.getExpo());
+//
+            }
+        }
+
+        while (itr1.hasNext()) {
 
             if (monomial1.getExpo() > monomial2.getExpo()) {
                 result.getTerms().put(monomial1.getExpo(), monomial1);

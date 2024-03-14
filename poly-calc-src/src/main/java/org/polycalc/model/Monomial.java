@@ -1,19 +1,25 @@
 package org.polycalc.model;
 
-public class Monomial {
+import org.polycalc.globals.Variable;
 
+public class Monomial {
     private double coeff;
-    private Character var;
+    public static Variable var;
     private int expo;
 
-    public Monomial(){}
-    public Monomial(double coeff, char var, int expo) {
-        this.coeff = coeff;
-        this.expo = expo;
-        this.var = var;
+    public Monomial(){
+        this.coeff = 1.0;
+        var = Variable.getInstance();
+        this.expo = 1;
     }
 
-    public Monomial(int coeff, char var, int expo) {
+    public Monomial(double coeff, Variable var, int expo) {
+        this.coeff = coeff;
+        this.var = var;
+        this.expo = expo;
+    }
+
+    public Monomial(int coeff, Variable var, int expo) {
         this.coeff = coeff;
         this.expo = expo;
         this.var = var;
@@ -35,11 +41,11 @@ public class Monomial {
         this.expo = expo;
     }
 
-    public char getVar() {
+    public Variable getVar() {
         return var;
     }
 
-    public void setVar(char var) {
+    public void setVar(Variable var) {
         this.var = var;
     }
 }
