@@ -1,5 +1,6 @@
 package org.polycalc.globals;
 
+// Singletone design patten is used in order to maintain only one instance of the variable x
 public class Variable {
     private String name;
     private double value;

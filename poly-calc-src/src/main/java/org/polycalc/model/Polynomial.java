@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Polynomial {
 
-    private static NavigableMap<Integer, Monomial> terms = new TreeMap<>(Collections.reverseOrder());
+    private NavigableMap<Integer, Monomial> terms = new TreeMap<>(Collections.reverseOrder());
 
     public int getHigherDegree(){
         return terms.firstEntry().getKey();
@@ -21,10 +21,10 @@ public class Polynomial {
         return Monomial.var;
     }
 
-    public void toString(Polynomial polynomial) {
+    public void print() {
 
-        Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();
-        Variable variable = polynomial.getVariable();
+        Iterator<Map.Entry<Integer, Monomial>> iterator = terms.entrySet().iterator();
+        Variable variable = getVariable();
 
         while (iterator.hasNext()) {
             Map.Entry entry = iterator.next();
@@ -35,7 +35,7 @@ public class Polynomial {
             if (coeff == 0) {
                 continue;
             } else if (coeff == 1 && expo != 0) {
-                System.out.print(variable + SuperScript.convert(expo));
+                System.out.print(variable.getName() + SuperScript.convert(expo));
             } else if (expo == 0) {
                 System.out.print(coeff);
             } else if (expo == 1) {

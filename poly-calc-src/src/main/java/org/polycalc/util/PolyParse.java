@@ -34,14 +34,14 @@ public class PolyParse {
                 String[] splitMatch = noSpaceMatch.split("x");
 
                 // check whether it contains a number
-                if (splitMatch[0].matches("[+-]?(?:\\d*\\.?\\d+)")) {
-                    coefficient = Double.parseDouble(splitMatch[0]);
-//                    System.out.println("Coeff = " + coefficient);
-                    // check whether it contains only negative sign
-                } else if (splitMatch[0].matches("-+")) {
+                if (splitMatch[0].matches("\\-")) {
                     coefficient = -1.0;
 //                    System.out.println("Coeff = " + coefficient);
                     // handle the case that it has only a positive sign
+                } else if (splitMatch[0].matches("[+-]?(?:\\d*\\.?\\d+)")) {
+                    coefficient = Double.parseDouble(splitMatch[0]);
+//                    System.out.println("Coeff = " + coefficient);
+                    // check whether it contains only negative sign
                 }
 
                 if (splitMatch.length > 1) {
