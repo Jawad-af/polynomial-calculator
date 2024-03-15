@@ -16,7 +16,6 @@ public class PolynomialCalculator extends JFrame {
     private JTextField resultField;
     private JPanel buttonPanel;
     private JButton addButton, subtractButton, multiplyButton, divideButton, clearButton;
-
     private Polynomial firstPoly;
     private Polynomial secondPoly;
 
