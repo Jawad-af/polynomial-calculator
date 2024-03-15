@@ -9,6 +9,7 @@ import org.polycalc.util.ToString;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
 
 public class PolynomialCalculator extends JFrame {
     private JTextField firstPolyField;
@@ -73,23 +74,33 @@ public class PolynomialCalculator extends JFrame {
             secondPoly = parse.extractPoly(secondPolyString);
 
             Polynomial result = new Polynomial();
-
+            HashMap<String, Polynomial> divisionResult = new HashMap<>();
+            StringBuilder output = new StringBuilder();
             switch (e.getActionCommand()) {
                 case "+":
                     result = polyOperations.add(firstPoly, secondPoly);
+                    output.append(toString.convert(result));
                     break;
                 case "-":
                     result = polyOperations.subtract(firstPoly, secondPoly);
+                    output.append(toString.convert(result));
                     break;
                 case "*":
                     result = polyOperations.multiply(firstPoly, secondPoly);
+                    output.append(toString.convert(result));
                     break;
                 case "/":
-                    // Division operation implementation here
+                    divisionResult = polyOperations.divide(firstPoly, secondPoly);
+                    result = divisionResult.get("result");
+                    output.append(toString.convert(result));
+                    output.append(" + ");
+                    result = divisionResult.get("reminder");
+                    output.append("(" + toString.convert(result) + ")/");
+                    result = divisionResult.get("divisor");
+                    output.append("(" + toString.convert(result) + ")");
                     break;
             }
-            String output = toString.convert(result);
-            resultField.setText(output);
+            resultField.setText(output.toString());
         }
     }
 

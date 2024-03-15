@@ -3,55 +3,59 @@ package org.polycalc.service;
 import org.polycalc.model.Monomial;
 import org.polycalc.model.Polynomial;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class PolyOperationsImplementation implements PolyOperations {
 
-    // this implementation will be changed the reason is that its a trivial one ( using regex would be more pro and efficient )
     @Override
     public Polynomial add(Polynomial p1, Polynomial p2) {
+
 
         Iterator<Map.Entry<Integer, Monomial>> itr1 = p1.getTerms().entrySet().iterator();
         Iterator<Map.Entry<Integer, Monomial>> itr2 = p2.getTerms().entrySet().iterator();
         Polynomial result = new Polynomial();
 
+        if (p1.getTerms().isEmpty() && !p2.getTerms().isEmpty()) {
+            return p2;
+        } else if (p2.getTerms().isEmpty() && !p1.getTerms().isEmpty()) {
+            return p1;
+        }
+
         Monomial monomial1 = itr1.hasNext() ? itr1.next().getValue() : null;
         Monomial monomial2 = itr2.hasNext() ? itr2.next().getValue() : null;
 
-        while (itr1.hasNext() || itr2.hasNext()) {
-            while (monomial1 != null && monomial2 != null) {
+        while (monomial1 != null && monomial2 != null) {
 
-                if (monomial1.getExpo() > monomial2.getExpo()) {
-                    result.getTerms().put(monomial1.getExpo(), monomial1);
-                    monomial1 = itr1.hasNext() ? itr1.next().getValue() : null;
-                } else if (monomial1.getExpo() < monomial2.getExpo()) {
-                    result.getTerms().put(monomial2.getExpo(), monomial2);
-                    monomial2 = itr2.hasNext() ? itr2.next().getValue() : null;
-                } else {
-                    Monomial monomial = new Monomial();
-                    monomial.setCoeff(monomial1.getCoeff() + monomial2.getCoeff());
-                    monomial.setExpo(monomial1.getExpo());
-                    monomial.setVar(monomial1.getVar());
-                    result.getTerms().put(monomial.getExpo(), monomial);
-                    monomial1 = itr1.hasNext() ? itr1.next().getValue() : null;
-                    monomial2 = itr2.hasNext() ? itr2.next().getValue() : null;
-                }
-            }
-            while (monomial1 != null) {
+            if (monomial1.getExpo() > monomial2.getExpo()) {
                 result.getTerms().put(monomial1.getExpo(), monomial1);
                 monomial1 = itr1.hasNext() ? itr1.next().getValue() : null;
-            }
-            while (monomial2 != null) {
+            } else if (monomial1.getExpo() < monomial2.getExpo()) {
                 result.getTerms().put(monomial2.getExpo(), monomial2);
                 monomial2 = itr2.hasNext() ? itr2.next().getValue() : null;
+            } else {
+                Monomial monomial = new Monomial();
+                monomial.setCoeff(monomial1.getCoeff() + monomial2.getCoeff());
+                monomial.setExpo(monomial1.getExpo());
+                monomial.setVar(monomial1.getVar());
+                result.getTerms().put(monomial.getExpo(), monomial);
+                monomial1 = itr1.hasNext() ? itr1.next().getValue() : null;
+                monomial2 = itr2.hasNext() ? itr2.next().getValue() : null;
             }
+        }
+        while (monomial1 != null) {
+            result.getTerms().put(monomial1.getExpo(), monomial1);
+            monomial1 = itr1.hasNext() ? itr1.next().getValue() : null;
+        }
+        while (monomial2 != null) {
+            result.getTerms().put(monomial2.getExpo(), monomial2);
+            monomial2 = itr2.hasNext() ? itr2.next().getValue() : null;
         }
         return result;
     }
     @Override
     public Polynomial subtract(Polynomial p1, Polynomial p2) {
-        Polynomial p3 = multiplyWithScalar(p2, -1);
+        Polynomial p3 = new Polynomial();
+        p3 = multiplyWithScalar(p2, -1);
         p3 = add(p1, p2);
         return p3;
     }
@@ -80,6 +84,7 @@ public class PolyOperationsImplementation implements PolyOperations {
         while (iterator.hasNext()) {
             Monomial mo = iterator.next().getValue();
             mo.setCoeff(mo.getCoeff() * value);
+            polynomial.getTerms().replace(mo.getExpo(), mo);
         }
         return polynomial;
     }
@@ -92,8 +97,67 @@ public class PolyOperationsImplementation implements PolyOperations {
     }
 
     @Override
-    public Polynomial divide(Polynomial p1, Polynomial p2) {
-        return null;
+    public HashMap<String, Polynomial> divide(Polynomial p1, Polynomial p2) {
+
+        Polynomial result = new Polynomial();
+        HashMap<String, Polynomial> finalResult = new HashMap<>();
+        
+        int higherDegreeP1 = p1.getHigherDegree();
+        int higherDegreeP2 = p2.getHigherDegree();
+
+        if (higherDegreeP2 > higherDegreeP1)
+            return finalResult;
+
+        double coeffP2 = p2.getTerms().get(higherDegreeP2).getCoeff();
+        if (coeffP2 > 1) {
+            p2 = divideByScalar(p2, coeffP2);
+        }
+
+        Polynomial reminder = p1;
+        Polynomial divisor = p2;
+        
+        int higherDegreeOfReminder = reminder.getHigherDegree();
+        while (higherDegreeOfReminder >= p2.getHigherDegree()) {
+            Monomial monomial = new Monomial(reminder.getTerms().get(higherDegreeOfReminder).getCoeff(),
+                    higherDegreeOfReminder - divisor.getHigherDegree());
+
+            result.getTerms().put(monomial.getExpo(), monomial);
+
+            Polynomial polynomialToMultiply = new Polynomial();
+            polynomialToMultiply.getTerms().put(monomial.getExpo(), monomial);
+
+            divisor = multiply(divisor, polynomialToMultiply);
+            divisor = multiplyWithScalar(divisor, -1);
+
+            reminder = add(reminder, divisor);
+            Iterator<Map.Entry<Integer, Monomial>> iterator = reminder.getTerms().entrySet().iterator();
+            while(iterator.hasNext()){
+                Map.Entry<Integer, Monomial> entry = iterator.next();
+                if (entry.getValue().getCoeff() == 0) {
+                    iterator.remove();
+                }
+            }
+            higherDegreeOfReminder = reminder.getHigherDegree();
+            divisor = p2;
+        }
+
+        result = divideByScalar(result, coeffP2);
+        p2 = multiplyWithScalar(p2, coeffP2);
+
+        finalResult.put("result", result);
+        finalResult.put("reminder", reminder);
+        finalResult.put("divisor", p2);
+
+        return finalResult;
+    }
+
+    private Polynomial divideByScalar(Polynomial polynomial, double value) {
+        Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();
+        while (iterator.hasNext()) {
+            Monomial mo = iterator.next().getValue();
+            iterator.next().getValue().setCoeff(mo.getCoeff() / value);
+        }
+        return polynomial;
     }
 
     @Override

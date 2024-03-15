@@ -4,7 +4,7 @@ import org.polycalc.globals.Variable;
 
 public class Monomial {
     private double coeff;
-    public static Variable var;
+    public static Variable var = Variable.getInstance();
     private int expo;
 
     public Monomial(){
@@ -23,6 +23,12 @@ public class Monomial {
         this.coeff = coeff;
         this.expo = expo;
         this.var = var;
+    }
+
+    public Monomial(double coeff, int expo) {
+        this.coeff = coeff;
+        this.var = var;
+        this.expo = expo;
     }
 
     public double getCoeff() {
