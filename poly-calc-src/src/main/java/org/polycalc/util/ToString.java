@@ -9,6 +9,9 @@ import java.util.Map;
 
 public class ToString {
     public String convert(Polynomial polynomial) {
+        if (polynomial.getTerms().isEmpty()) {
+            return "";
+        }
 
         StringBuilder result = new StringBuilder();
         Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();

@@ -12,6 +12,6 @@ public interface PolyOperations {
     Polynomial multiply(Polynomial p1, Polynomial p2);
     HashMap<String, Polynomial> divide(Polynomial p1, Polynomial p2);
     Polynomial integrate(Polynomial p);
-    Polynomial derive(Polynomial p);
+    Polynomial differentiate(Polynomial p);
 
 }

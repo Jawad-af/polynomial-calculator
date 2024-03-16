@@ -16,14 +16,14 @@ public class PolynomialCalculator extends JFrame {
     private JTextField secondPolyField;
     private JTextField resultField;
     private JPanel buttonPanel;
-    private JButton addButton, subtractButton, multiplyButton, divideButton, clearButton;
+    private JButton addButton, subtractButton, multiplyButton, divideButton, integrateButton, differentiateButton, clearButton;
     private Polynomial firstPoly;
     private Polynomial secondPoly;
 
     public PolynomialCalculator() {
         setTitle("Polynomial Calculator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 200);
+        setSize(500, 200);
         setLocationRelativeTo(null);
 
         firstPolyField = new JTextField();
@@ -31,7 +31,7 @@ public class PolynomialCalculator extends JFrame {
         resultField = new JTextField();
         resultField.setEditable(false);
 
-        buttonPanel = new JPanel(new GridLayout(2, 4));
+        buttonPanel = new JPanel(new GridLayout(3, 3));
         addButton = new JButton("+");
         addButton.addActionListener(new OperatorButtonListener());
         subtractButton = new JButton("-");
@@ -40,6 +40,10 @@ public class PolynomialCalculator extends JFrame {
         multiplyButton.addActionListener(new OperatorButtonListener());
         divideButton = new JButton("/");
         divideButton.addActionListener(new OperatorButtonListener());
+        integrateButton = new JButton("Integrate");
+        integrateButton.addActionListener(new OperatorButtonListener());
+        differentiateButton = new JButton("Differentiate");
+        differentiateButton.addActionListener(new OperatorButtonListener());
         clearButton = new JButton("C");
         clearButton.addActionListener(new ClearButtonListener());
 
@@ -47,6 +51,8 @@ public class PolynomialCalculator extends JFrame {
         buttonPanel.add(subtractButton);
         buttonPanel.add(multiplyButton);
         buttonPanel.add(divideButton);
+        buttonPanel.add(integrateButton);
+        buttonPanel.add(differentiateButton);
         buttonPanel.add(clearButton);
 
         setLayout(new BorderLayout());
@@ -98,6 +104,14 @@ public class PolynomialCalculator extends JFrame {
                     output.append("(" + toString.convert(result) + ")/");
                     result = divisionResult.get("divisor");
                     output.append("(" + toString.convert(result) + ")");
+                    break;
+                case "Integrate":
+                    result = polyOperations.integrate(firstPoly);
+                    output.append(toString.convert(result));
+                    break;
+                case "Differentiate":
+                    result = polyOperations.differentiate(firstPoly);
+                    output.append(toString.convert(result));
                     break;
             }
             resultField.setText(output.toString());

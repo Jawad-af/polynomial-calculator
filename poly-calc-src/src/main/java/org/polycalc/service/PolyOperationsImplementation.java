@@ -4,12 +4,14 @@ import org.polycalc.model.Monomial;
 import org.polycalc.model.Polynomial;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class PolyOperationsImplementation implements PolyOperations {
 
     @Override
     public Polynomial add(Polynomial p1, Polynomial p2) {
-
 
         Iterator<Map.Entry<Integer, Monomial>> itr1 = p1.getTerms().entrySet().iterator();
         Iterator<Map.Entry<Integer, Monomial>> itr2 = p2.getTerms().entrySet().iterator();
@@ -20,12 +22,10 @@ public class PolyOperationsImplementation implements PolyOperations {
         } else if (p2.getTerms().isEmpty() && !p1.getTerms().isEmpty()) {
             return p1;
         }
-
         Monomial monomial1 = itr1.hasNext() ? itr1.next().getValue() : null;
         Monomial monomial2 = itr2.hasNext() ? itr2.next().getValue() : null;
 
         while (monomial1 != null && monomial2 != null) {
-
             if (monomial1.getExpo() > monomial2.getExpo()) {
                 result.getTerms().put(monomial1.getExpo(), monomial1);
                 monomial1 = itr1.hasNext() ? itr1.next().getValue() : null;
@@ -52,6 +52,7 @@ public class PolyOperationsImplementation implements PolyOperations {
         }
         return result;
     }
+
     @Override
     public Polynomial subtract(Polynomial p1, Polynomial p2) {
         Polynomial p3 = new Polynomial();
@@ -77,23 +78,6 @@ public class PolyOperationsImplementation implements PolyOperations {
             result = add(result, interPoly);
         }
         return result;
-    }
-
-    private Polynomial multiplyWithScalar(Polynomial polynomial, double value) {
-        Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();
-        while (iterator.hasNext()) {
-            Monomial mo = iterator.next().getValue();
-            mo.setCoeff(mo.getCoeff() * value);
-            polynomial.getTerms().replace(mo.getExpo(), mo);
-        }
-        return polynomial;
-    }
-
-    private Monomial multiplyMonomial(Monomial m1, Monomial m2) {
-        Monomial m3 = new Monomial();
-        m3.setCoeff(m1.getCoeff() * m2.getCoeff());
-        m3.setExpo(m1.getExpo() + m2.getExpo());
-        return m3;
     }
 
     @Override
@@ -151,6 +135,62 @@ public class PolyOperationsImplementation implements PolyOperations {
         return finalResult;
     }
 
+    @Override
+    public Polynomial integrate(Polynomial p) {
+        if (p.getTerms().isEmpty()) {
+            return p;
+        }
+        for (Monomial monomial : p.getTerms().values()) {
+            int expo = monomial.getExpo() + 1;
+            double coeff = monomial.getCoeff() / expo;
+            monomial.setExpo(expo);
+            monomial.setCoeff(coeff);
+        }
+        return p;
+    }
+
+    @Override
+    public Polynomial differentiate(Polynomial p) {
+        if (p.getTerms().isEmpty()) {
+            return p;
+        }
+        // ConcurrentHashMap is used to avoid the "ConcurrentModificationException"
+        ConcurrentHashMap<Integer, Monomial> concurrentHashMap = new ConcurrentHashMap();
+        concurrentHashMap.putAll(p.getTerms());
+
+        Iterator<Map.Entry<Integer, Monomial>> iterator = concurrentHashMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, Monomial> entry = iterator.next();
+            int expo = entry.getValue().getExpo();
+            double coeff = entry.getValue().getCoeff();
+            iterator.remove();
+            if (expo > 0) {
+                concurrentHashMap.put(expo - 1, new Monomial(expo * coeff, expo - 1));
+            }
+        }
+        p.getTerms().clear();
+        p.getTerms().putAll(concurrentHashMap);
+        return p;
+    }
+
+
+    private Polynomial multiplyWithScalar(Polynomial polynomial, double value) {
+        Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();
+        while (iterator.hasNext()) {
+            Monomial mo = iterator.next().getValue();
+            mo.setCoeff(mo.getCoeff() * value);
+            polynomial.getTerms().replace(mo.getExpo(), mo);
+        }
+        return polynomial;
+    }
+
+    private Monomial multiplyMonomial(Monomial m1, Monomial m2) {
+        Monomial m3 = new Monomial();
+        m3.setCoeff(m1.getCoeff() * m2.getCoeff());
+        m3.setExpo(m1.getExpo() + m2.getExpo());
+        return m3;
+    }
+
     private Polynomial divideByScalar(Polynomial polynomial, double value) {
         Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();
         while (iterator.hasNext()) {
@@ -159,14 +199,5 @@ public class PolyOperationsImplementation implements PolyOperations {
         }
         return polynomial;
     }
-
-    @Override
-    public Polynomial integrate(Polynomial p) {
-        return null;
-    }
-
-    @Override
-    public Polynomial derive(Polynomial p) {
-        return null;
-    }
 }
+
