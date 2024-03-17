@@ -1,17 +1,24 @@
-package org.polycalc.util;
+package org.polycalc.polyopsimplementaion;
 
 import org.polycalc.globals.Variable;
 import org.polycalc.model.Monomial;
 import org.polycalc.model.Polynomial;
+import org.polycalc.operations.Transformation;
+import org.polycalc.util.SuperScript;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PolyParse {
+public class PolynomialTransformation implements Transformation {
 
-    public Polynomial extractPoly(String input) {
 //      The pattern was tested on this input
 //      Matcher matcher = pattern.matcher("-323x+ 12.1x^ + dfx^4 + 2x  ^8 - x + 1 +5 -0 +43.1x^  9 -23.5x + 32c -   3x ");
+    @Override
+    public Polynomial parse(String input) {
+
+
         String regExPattern = "([-+]?\\s*\\d*\\.?\\d*X\\s*\\^*\\s*[1-9]*)|(\\b[1-9]+\\b)|([+-]\\s*[0-9]+)";
         Pattern pattern = Pattern.compile(regExPattern, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(input);
@@ -65,7 +72,46 @@ public class PolyParse {
                 }
             }
         }
-
         return polynomial;
+    }
+
+    @Override
+    public String convertToString(Polynomial polynomial) {
+        if (polynomial.getTerms().isEmpty()) {
+            return "";
+        }
+
+        StringBuilder result = new StringBuilder();
+        Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();
+        Variable variable = polynomial.getVariable();
+        Monomial monomial = iterator.hasNext() ? iterator.next().getValue() : null;
+
+        while (monomial != null) {
+
+            double coeff = monomial.getCoeff();
+            int expo = monomial.getExpo();
+
+            if (coeff == 0) {
+                continue;
+            } else if (coeff == 1 && expo == 1) {
+                result.append(variable.getName());
+            } else if (coeff == 1 && expo != 0) {
+                result.append(variable.getName() + SuperScript.convert(expo));
+            }else if (expo == 0) {
+                result.append(coeff);
+            } else if (expo == 1) {
+                result.append(coeff + variable.getName());
+            } else {
+                result.append(coeff + variable.getName() + SuperScript.convert(expo));
+            }
+            monomial = iterator.hasNext() ? iterator.next().getValue() : null;
+
+            if (monomial != null && monomial.getCoeff() > 0) {
+                result.append(" +");
+            } else if (monomial != null && monomial.getCoeff() < 0){
+                result.append(" ");
+            }
+        }
+        return result.toString();
     }
 }

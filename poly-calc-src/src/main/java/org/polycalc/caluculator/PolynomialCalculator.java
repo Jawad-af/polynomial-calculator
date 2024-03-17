@@ -1,10 +1,12 @@
 package org.polycalc.calculator;
 
 import org.polycalc.model.Polynomial;
+import org.polycalc.operations.Arithmetic;
+import org.polycalc.operations.Transformation;
+import org.polycalc.polyopsimplementaion.PolynomialArithmetic;
+import org.polycalc.polyopsimplementaion.PolynomialTransformation;
 import org.polycalc.service.PolyOperations;
 import org.polycalc.service.PolyOperationsImplementation;
-import org.polycalc.util.PolyParse;
-import org.polycalc.util.ToString;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,12 +74,13 @@ public class PolynomialCalculator extends JFrame {
             String firstPolyString = firstPolyField.getText();
             String secondPolyString = secondPolyField.getText();
 
-            PolyParse parse = new PolyParse();
-            ToString toString = new ToString();
+            Transformation transformation = new PolynomialTransformation();
+            Arithmetic arithmetic = new PolynomialArithmetic();
+
             PolyOperations polyOperations = new PolyOperationsImplementation();
 
-            firstPoly = parse.extractPoly(firstPolyString);
-            secondPoly = parse.extractPoly(secondPolyString);
+            firstPoly = transformation.parse(firstPolyString);
+            secondPoly = transformation.parse(secondPolyString);
 
             Polynomial result = new Polynomial();
             HashMap<String, Polynomial> divisionResult = new HashMap<>();
@@ -85,33 +88,33 @@ public class PolynomialCalculator extends JFrame {
             switch (e.getActionCommand()) {
                 case "+":
                     result = polyOperations.add(firstPoly, secondPoly);
-                    output.append(toString.convert(result));
+                    output.append(transformation.convertToString((result)));
                     break;
                 case "-":
                     result = polyOperations.subtract(firstPoly, secondPoly);
-                    output.append(toString.convert(result));
+                    output.append(transformation.convertToString((result)));
                     break;
                 case "*":
                     result = polyOperations.multiply(firstPoly, secondPoly);
-                    output.append(toString.convert(result));
+                    output.append(transformation.convertToString((result)));
                     break;
                 case "/":
                     divisionResult = polyOperations.divide(firstPoly, secondPoly);
                     result = divisionResult.get("result");
-                    output.append(toString.convert(result));
+                    output.append(transformation.convertToString((result)));
                     output.append(" + ");
                     result = divisionResult.get("reminder");
-                    output.append("(" + toString.convert(result) + ")/");
+                    output.append("(" + transformation.convertToString((result)) + ")/");
                     result = divisionResult.get("divisor");
-                    output.append("(" + toString.convert(result) + ")");
+                    output.append("(" + transformation.convertToString((result)) + ")");
                     break;
                 case "Integrate":
                     result = polyOperations.integrate(firstPoly);
-                    output.append(toString.convert(result));
+                    output.append(transformation.convertToString((result)));
                     break;
                 case "Differentiate":
                     result = polyOperations.differentiate(firstPoly);
-                    output.append(toString.convert(result));
+                    output.append(transformation.convertToString((result)));
                     break;
             }
             resultField.setText(output.toString());
