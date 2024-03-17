@@ -38,7 +38,7 @@ public class OperationsHandling {
                 result = arithmetic.integrate(firstPoly);
                 break;
             case DIFFERENTIATE:
-                result = arithmetic.differentiate(firstPoly);
+                result = arithmetic.differentiate(secondPoly);
                 break;
         }
         if (operationType == OperationType.DIVIDE) {

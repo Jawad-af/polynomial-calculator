@@ -54,9 +54,9 @@ public class Interface extends JFrame {
 
         setLayout(new BorderLayout());
         JPanel inputPanel = new JPanel(new GridLayout(2, 2));
-        inputPanel.add(new JLabel("First Polynomial:"));
+        inputPanel.add(new JLabel("First Polynomial | Integration:"));
         inputPanel.add(firstPolyField);
-        inputPanel.add(new JLabel("Second Polynomial:"));
+        inputPanel.add(new JLabel("Second Polynomial | Differentiation:"));
         inputPanel.add(secondPolyField);
 
         add(inputPanel, BorderLayout.NORTH);
