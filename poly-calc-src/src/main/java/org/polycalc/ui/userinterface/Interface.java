@@ -1,19 +1,14 @@
-package org.polycalc.calculator;
+package org.polycalc.ui.userinterface;
 
 import org.polycalc.model.Polynomial;
-import org.polycalc.operations.api.Arithmetic;
-import org.polycalc.operations.api.Transformation;
-import org.polycalc.operations.service.PolynomialArithmetic;
-import org.polycalc.operations.service.PolynomialTransformation;
 import org.polycalc.operations.type.OperationType;
 import org.polycalc.ui.service.OperationsHandling;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
 
-public class PolynomialCalculator extends JFrame {
+public class Interface extends JFrame {
     private JTextField firstPolyField;
     private JTextField secondPolyField;
     private JTextField resultField;
@@ -22,7 +17,7 @@ public class PolynomialCalculator extends JFrame {
     private Polynomial firstPoly;
     private Polynomial secondPoly;
 
-    public PolynomialCalculator() {
+    public Interface() {
         setTitle("Polynomial Calculator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 200);
@@ -93,13 +88,5 @@ public class PolynomialCalculator extends JFrame {
             secondPolyField.setText("");
             resultField.setText("");
         }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new PolynomialCalculator().setVisible(true);
-            }
-        });
     }
 }
