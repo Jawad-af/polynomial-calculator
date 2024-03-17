@@ -1,12 +1,12 @@
 package org.polycalc.calculator;
 
 import org.polycalc.model.Polynomial;
-import org.polycalc.operations.Arithmetic;
-import org.polycalc.operations.Transformation;
-import org.polycalc.polyopsimplementaion.PolynomialArithmetic;
-import org.polycalc.polyopsimplementaion.PolynomialTransformation;
-import org.polycalc.service.PolyOperations;
-import org.polycalc.service.PolyOperationsImplementation;
+import org.polycalc.operations.api.Arithmetic;
+import org.polycalc.operations.api.Transformation;
+import org.polycalc.operations.service.PolynomialArithmetic;
+import org.polycalc.operations.service.PolynomialTransformation;
+import org.polycalc.operations.type.OperationType;
+import org.polycalc.ui.service.OperationsHandling;
 
 import javax.swing.*;
 import java.awt.*;
@@ -74,51 +74,17 @@ public class PolynomialCalculator extends JFrame {
             String firstPolyString = firstPolyField.getText();
             String secondPolyString = secondPolyField.getText();
 
-            Transformation transformation = new PolynomialTransformation();
-            Arithmetic arithmetic = new PolynomialArithmetic();
-
-            PolyOperations polyOperations = new PolyOperationsImplementation();
-
-            firstPoly = transformation.parse(firstPolyString);
-            secondPoly = transformation.parse(secondPolyString);
-
-            Polynomial result = new Polynomial();
-            HashMap<String, Polynomial> divisionResult = new HashMap<>();
+            OperationType operationType = getOperationType(e.getActionCommand());
             StringBuilder output = new StringBuilder();
-            switch (e.getActionCommand()) {
-                case "+":
-                    result = polyOperations.add(firstPoly, secondPoly);
-                    output.append(transformation.convertToString((result)));
-                    break;
-                case "-":
-                    result = polyOperations.subtract(firstPoly, secondPoly);
-                    output.append(transformation.convertToString((result)));
-                    break;
-                case "*":
-                    result = polyOperations.multiply(firstPoly, secondPoly);
-                    output.append(transformation.convertToString((result)));
-                    break;
-                case "/":
-                    divisionResult = polyOperations.divide(firstPoly, secondPoly);
-                    result = divisionResult.get("result");
-                    output.append(transformation.convertToString((result)));
-                    output.append(" + ");
-                    result = divisionResult.get("reminder");
-                    output.append("(" + transformation.convertToString((result)) + ")/");
-                    result = divisionResult.get("divisor");
-                    output.append("(" + transformation.convertToString((result)) + ")");
-                    break;
-                case "Integrate":
-                    result = polyOperations.integrate(firstPoly);
-                    output.append(transformation.convertToString((result)));
-                    break;
-                case "Differentiate":
-                    result = polyOperations.differentiate(firstPoly);
-                    output.append(transformation.convertToString((result)));
-                    break;
-            }
+
+            OperationsHandling operationsHandler = new OperationsHandling();
+            output = operationsHandler.execute(firstPolyString, secondPolyString, operationType);
             resultField.setText(output.toString());
         }
+    }
+
+    private OperationType getOperationType(String actionCommand) {
+        return OperationType.fromString(actionCommand);
     }
 
     private class ClearButtonListener implements ActionListener {

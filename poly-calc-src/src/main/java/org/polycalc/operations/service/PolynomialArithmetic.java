@@ -1,8 +1,8 @@
-package org.polycalc.polyopsimplementaion;
+package org.polycalc.operations.service;
 
 import org.polycalc.model.Monomial;
 import org.polycalc.model.Polynomial;
-import org.polycalc.operations.Arithmetic;
+import org.polycalc.operations.api.Arithmetic;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -208,8 +208,9 @@ public class PolynomialArithmetic implements Arithmetic {
     private Polynomial divideByScalar(Polynomial polynomial, double value) {
         Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();
         while (iterator.hasNext()) {
-            Monomial mo = iterator.next().getValue();
-            iterator.next().getValue().setCoeff(mo.getCoeff() / value);
+            Map.Entry<Integer, Monomial> entry = iterator.next();
+            double coeff = entry.getValue().getCoeff();
+            entry.getValue().setCoeff(coeff / value);
         }
         return polynomial;
     }

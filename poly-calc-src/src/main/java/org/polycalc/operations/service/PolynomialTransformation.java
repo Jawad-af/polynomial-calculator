@@ -1,9 +1,9 @@
-package org.polycalc.polyopsimplementaion;
+package org.polycalc.operations.service;
 
 import org.polycalc.globals.Variable;
 import org.polycalc.model.Monomial;
 import org.polycalc.model.Polynomial;
-import org.polycalc.operations.Transformation;
+import org.polycalc.operations.api.Transformation;
 import org.polycalc.util.SuperScript;
 
 import java.util.Iterator;
@@ -95,7 +95,7 @@ public class PolynomialTransformation implements Transformation {
                 continue;
             } else if (coeff == 1 && expo == 1) {
                 result.append(variable.getName());
-            } else if (coeff == 1 && expo != 0) {
+            } else if (coeff == 1.0 && expo != 0) {
                 result.append(variable.getName() + SuperScript.convert(expo));
             }else if (expo == 0) {
                 result.append(coeff);

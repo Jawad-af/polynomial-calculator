@@ -1,4 +1,4 @@
-package org.polycalc.operations;
+package org.polycalc.operations.api;
 
 import org.polycalc.model.Polynomial;
 
