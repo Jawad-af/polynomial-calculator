@@ -20,10 +20,15 @@ class PolyOperationsTest {
     Transformation transformation = new PolynomialTransformation();
     Arithmetic arithmetic = new PolynomialArithmetic();
 
+    Polynomial p1;
+    Polynomial p2;
+
     @BeforeEach
     public void initialize() {
         transformation = new PolynomialTransformation();
         arithmetic = new PolynomialArithmetic();
+        p1 = new Polynomial();
+        p2 = new Polynomial();
     }
 
 //    @Test
@@ -50,8 +55,6 @@ class PolyOperationsTest {
 
     @Test
     void add_additionalCase2() {
-        Polynomial p1 = new Polynomial();
-        Polynomial p2 = new Polynomial();
 
         // 2x^2 - 3x + 4
         p1.getTerms().put(2, new Monomial(2, 2));
@@ -71,78 +74,7 @@ class PolyOperationsTest {
     }
 
     @Test
-    void subtract_additionalCase1() {
-        Polynomial p1 = new Polynomial();
-        Polynomial p2 = new Polynomial();
-
-        // 4x^3 + 2x^2 - 5
-        p1.getTerms().put(3, new Monomial(4, 3));
-        p1.getTerms().put(2, new Monomial(2, 2));
-        p1.getTerms().put(0, new Monomial(-5, 0));
-
-        // -2x^2 + 3x + 1
-        p2.getTerms().put(2, new Monomial(-2, 2));
-        p2.getTerms().put(1, new Monomial(3, 1));
-        p2.getTerms().put(0, new Monomial(1, 0));
-
-        Polynomial result = arithmetic.subtract(p1, p2);
-        String expected = "4.0X\u00B3 +4.0X\u00B2 -3.0X -6.0";
-        String actual = transformation.convertToString(result);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void subtract_additionalCase2() {
-        Polynomial p1 = new Polynomial();
-        Polynomial p2 = new Polynomial();
-
-        // 2x^2 - 3x + 4
-        p1.getTerms().put(2, new Monomial(2, 2));
-        p1.getTerms().put(1, new Monomial(-3, 1));
-        p1.getTerms().put(0, new Monomial(4, 0));
-
-        // 5x^3 + 2x - 1
-        p2.getTerms().put(3, new Monomial(5, 3));
-        p2.getTerms().put(1, new Monomial(2, 1));
-        p2.getTerms().put(0, new Monomial(-1, 0));
-
-        Polynomial result = arithmetic.subtract(p1, p2);
-        String expected = "-5.0X\u00B3 +2.0X\u00B2 -5.0X +5.0";
-        String actual = transformation.convertToString(result);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void add() {
-
-        Polynomial p1 = new Polynomial();
-        Polynomial p2 = new Polynomial();
-
-        // 2X^3 - X + 12
-        p1.getTerms().put(3, new Monomial(2, 3));
-        p1.getTerms().put(1, new Monomial(-1, 1));
-        p1.getTerms().put(0, new Monomial(12, 0));
-
-        // 4X^2 + 3X + 2
-        p2.getTerms().put(2, new Monomial(4, 2));
-        p2.getTerms().put(1, new Monomial(3, 1));
-        p2.getTerms().put(0, new Monomial(2, 0));
-
-
-        Polynomial result = arithmetic.add(p1, p2);
-        String expected = "2.0X\u00B3 +4.0X\u00B2 +2.0X +14.0";
-        String actual = transformation.convertToString(result);
-
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void subtract() {
-
-        Polynomial p1 = new Polynomial();
-        Polynomial p2 = new Polynomial();
+    void subtract_additionalCase0() {
 
         // 2X^3 - X + 12
         p1.getTerms().put(3, new Monomial(2, 3));
@@ -163,9 +95,68 @@ class PolyOperationsTest {
     }
 
     @Test
-    void multiply() {
-        Polynomial p1 = new Polynomial();
-        Polynomial p2 = new Polynomial();
+    void subtract_additionalCase1() {
+
+        // 4x^3 + 2x^2 - 5
+        p1.getTerms().put(3, new Monomial(4, 3));
+        p1.getTerms().put(2, new Monomial(2, 2));
+        p1.getTerms().put(0, new Monomial(-5, 0));
+
+        // -2x^2 + 3x + 1
+        p2.getTerms().put(2, new Monomial(-2, 2));
+        p2.getTerms().put(1, new Monomial(3, 1));
+        p2.getTerms().put(0, new Monomial(1, 0));
+
+        Polynomial result = arithmetic.subtract(p1, p2);
+        String expected = "4.0X\u00B3 +4.0X\u00B2 -3.0X -6.0";
+        String actual = transformation.convertToString(result);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void subtract_additionalCase2() {
+
+        // 2x^2 - 3x + 4
+        p1.getTerms().put(2, new Monomial(2, 2));
+        p1.getTerms().put(1, new Monomial(-3, 1));
+        p1.getTerms().put(0, new Monomial(4, 0));
+
+        // 5x^3 + 2x - 1
+        p2.getTerms().put(3, new Monomial(5, 3));
+        p2.getTerms().put(1, new Monomial(2, 1));
+        p2.getTerms().put(0, new Monomial(-1, 0));
+
+        Polynomial result = arithmetic.subtract(p1, p2);
+        String expected = "-5.0X\u00B3 +2.0X\u00B2 -5.0X +5.0";
+        String actual = transformation.convertToString(result);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void subtract_additionalCase3() {
+
+        // 2X^3 - X + 12
+        p1.getTerms().put(3, new Monomial(2, 3));
+        p1.getTerms().put(1, new Monomial(-1, 1));
+        p1.getTerms().put(0, new Monomial(12, 0));
+
+        // 4X^2 + 3X + 2
+        p2.getTerms().put(2, new Monomial(4, 2));
+        p2.getTerms().put(1, new Monomial(3, 1));
+        p2.getTerms().put(0, new Monomial(2, 0));
+
+
+        Polynomial result = arithmetic.add(p1, p2);
+        String expected = "2.0X\u00B3 +4.0X\u00B2 +2.0X +14.0";
+        String actual = transformation.convertToString(result);
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void multiply_additionalCase0() {
 
         // 2x^2-3x^3+2
         p1.getTerms().put(2, new Monomial(2, 2));
@@ -186,8 +177,6 @@ class PolyOperationsTest {
 
     @Test
     void multiply_additionalCase1() {
-        Polynomial p1 = new Polynomial();
-        Polynomial p2 = new Polynomial();
 
         // 4x^3 + 2x^2 - 5
         p1.getTerms().put(3, new Monomial(4, 3));
@@ -207,8 +196,6 @@ class PolyOperationsTest {
 
     @Test
     void multiply_additionalCase2() {
-        Polynomial p1 = new Polynomial();
-        Polynomial p2 = new Polynomial();
 
         // -3x^2 + 5x - 7
         p1.getTerms().put(2, new Monomial(-3, 2));
@@ -228,17 +215,77 @@ class PolyOperationsTest {
 
 
     @Test
-    void divide() {
-        Polynomial p1 = new Polynomial();
-        Polynomial p2 = new Polynomial();
+    void divide1() {
 
-        // 2x^2-3x^3+2
-        p1.getTerms().put(2, new Monomial(2, 2));
-        p1.getTerms().put(3, new Monomial(-3, 3));
-        p1.getTerms().put(0, new Monomial(2, 0));
+        // x^3 - 2x^2 + 0x -4
+        p1.getTerms().put(3, new Monomial(1, 3));
+        p1.getTerms().put(2, new Monomial(-2, 2));
+        p1.getTerms().put(1, new Monomial(0, 1));
+        p1.getTerms().put(0, new Monomial(-4, 0));
 
-        // 3X^2 - 2
-        p2.getTerms().put(2, new Monomial(1, 2));
+
+        // x - 3
+        p2.getTerms().put(1, new Monomial(1, 1));
+        p2.getTerms().put(0, new Monomial(-3, 0));
+
+
+        HashMap<String, Polynomial> divisionResult = arithmetic.divide(p1, p2);
+        Polynomial result = divisionResult.get("result");
+        Polynomial reminder = divisionResult.get("reminder");
+        Polynomial divisor = divisionResult.get("divisor");
+
+        StringBuilder output = new StringBuilder();
+        output.append(transformation.convertToString(result));
+        output.append(" + ");
+        output.append("(" + transformation.convertToString(reminder) + ")/");
+        output.append("(" + transformation.convertToString(divisor) + ")");
+
+        String expected = "X\u00B2 +X +3.0 + (5.0)/(X -3.0)";
+        String actual = output.toString();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void divide2() {
+
+        // 4x^2 + 2x -3
+        p1.getTerms().put(2, new Monomial(4, 2));
+        p1.getTerms().put(1, new Monomial(2, 1));
+        p1.getTerms().put(0, new Monomial(-3, 0));
+
+        // -X + 2
+        p2.getTerms().put(1, new Monomial(-1, 1));
+        p2.getTerms().put(0, new Monomial(+2, 0));
+
+
+        HashMap<String, Polynomial> divisionResult = arithmetic.divide(p1, p2);
+        Polynomial result = divisionResult.get("result");
+        Polynomial reminder = divisionResult.get("reminder");
+        Polynomial divisor = divisionResult.get("divisor");
+
+        StringBuilder output = new StringBuilder();
+        output.append(transformation.convertToString(result));
+        output.append(" + ");
+        output.append("(" + transformation.convertToString(reminder) + ")/");
+        output.append("(" + transformation.convertToString(divisor) + ")");
+
+        String expected = "-4.0X -10.0 + (17.0)/(-1.0X +2.0)";
+        String actual = output.toString();
+
+        assertEquals(expected, actual);
+    }
+    @Test
+    void divide3() {
+
+        // 2x^3 - 8x^2 - 6x + 10
+        p1.getTerms().put(3, new Monomial(2, 3));
+        p1.getTerms().put(2, new Monomial(8, 2));
+        p1.getTerms().put(1, new Monomial(-6, 1));
+        p1.getTerms().put(0, new Monomial(10, 0));
+
+        // X - 3
+        p2.getTerms().put(1, new Monomial(1, 1));
         p2.getTerms().put(0, new Monomial(-2, 0));
 
 
@@ -250,18 +297,16 @@ class PolyOperationsTest {
         StringBuilder output = new StringBuilder();
         output.append(transformation.convertToString(result));
         output.append(" + ");
-        output.append("(").append(transformation.convertToString(reminder)).append(")/");
-        output.append("(").append(transformation.convertToString(divisor)).append(")");
+        output.append("(" + transformation.convertToString(reminder) + ")/");
+        output.append("(" + transformation.convertToString(divisor) + ")");
 
-        String expected = "-9.0X\u2075 +6.0X\u2074 +6.0X\u00B3 +2.0X\u00B2 -4.0";
+        String expected = "2.0X\u00B2 +12.0X +18.0 + (46.0)/(X -2.0)";
         String actual = output.toString();
 
         assertEquals(expected, actual);
     }
-
     @Test
     void integrate() {
-        Polynomial p1 = new Polynomial();
 
         // p1 = -4x^3 + 6x^2 + 2
         p1.getTerms().put(3, new Monomial(-4, 3));
@@ -276,8 +321,6 @@ class PolyOperationsTest {
 
     @Test
     void differentiate() {
-
-        Polynomial p1 = new Polynomial();
 
         // p1 = -4x^3 + 6x^2 + 2
         p1.getTerms().put(3, new Monomial(-4, 3));

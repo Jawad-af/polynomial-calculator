@@ -6,8 +6,13 @@ import org.polycalc.operations.api.Transformation;
 import org.polycalc.operations.service.PolynomialArithmetic;
 import org.polycalc.operations.service.PolynomialTransformation;
 import org.polycalc.operations.type.OperationType;
+import javax.swing.JOptionPane;
 
+import javax.swing.*;
 import java.util.HashMap;
+
+import static java.lang.System.exit;
+import static org.polycalc.operations.type.OperationType.*;
 
 public class OperationsHandling {
 
@@ -17,34 +22,48 @@ public class OperationsHandling {
 
         Polynomial firstPoly = transformation.parse(firstPolyString);
         Polynomial secondPoly = transformation.parse(secondPolyString);
-
         Polynomial result = new Polynomial();
         StringBuilder output = new StringBuilder();
 
         switch (operationType) {
-            case ADD:
-                result = arithmetic.add(firstPoly, secondPoly);
-                break;
-            case SUBTRACT:
-                result = arithmetic.subtract(firstPoly, secondPoly);
-                break;
-            case MULTIPLY:
-                result = arithmetic.multiply(firstPoly, secondPoly);
-                break;
-            case DIVIDE:
-                output = handleDivision(arithmetic, firstPoly, secondPoly, transformation);
-                break;
             case INTEGRATE:
                 result = arithmetic.integrate(firstPoly);
-                break;
+                output.append(transformation.convertToString(result));
+                return output;
             case DIFFERENTIATE:
                 result = arithmetic.differentiate(secondPoly);
-                break;
+                output.append(transformation.convertToString(result));
+                return output;
         }
-        if (operationType == OperationType.DIVIDE) {
+
+        if (!firstPoly.getTerms().isEmpty() && !secondPoly.getTerms().isEmpty()) {
+            switch (operationType) {
+                    case ADD:
+                        result = arithmetic.add(firstPoly, secondPoly);
+                        break;
+                    case SUBTRACT:
+                        result = arithmetic.subtract(firstPoly, secondPoly);
+                        break;
+                    case MULTIPLY:
+                        result = arithmetic.multiply(firstPoly, secondPoly);
+                        break;
+                    case DIVIDE:
+                        if (firstPoly.getHigherDegree() < secondPoly.getHigherDegree()) {
+                            output.append("The degree of the numerator should be higher!");
+                        } else {
+                            output = handleDivision(arithmetic, firstPoly, secondPoly, transformation);
+                        }
+                        break;
+                    }
+        } else {
+            output.append("Invalid input! Please provide two valid operands");
+        }
+
+        if (operationType == DIVIDE) {
             return output;
+        } else {
+            output.append(transformation.convertToString(result));
         }
-        output.append(transformation.convertToString(result));
         return output;
     }
 
@@ -57,12 +76,25 @@ public class OperationsHandling {
 
         StringBuilder output = new StringBuilder();
         output.append(transformation.convertToString(result));
-        output.append(" + ");
-        output.append("(").append(transformation.convertToString(reminder)).append(")/");
-        output.append("(").append(transformation.convertToString(divisor)).append(")");
+        if (!(transformation.convertToString(reminder) == "")) {
+            output.append("+ (").append(transformation.convertToString(reminder)).append(")/");
+            output.append("(").append(transformation.convertToString(divisor)).append(")");
+        }
 
         return output;
     }
+
+//    public void displayError(String toBeDisplayed) {
+//        JTextField textField = new JTextField();
+//        textField.setText(toBeDisplayed);
+//        exit(1);
+//    }
+//
+
+    public void displayError(String toBeDisplayed) {
+        JOptionPane.showMessageDialog(null, toBeDisplayed, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
 }
 
 

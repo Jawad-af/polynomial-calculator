@@ -4,10 +4,13 @@ import org.polycalc.model.Monomial;
 import org.polycalc.model.Polynomial;
 import org.polycalc.operations.api.Arithmetic;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.lang.System.exit;
 
 public class PolynomialArithmetic implements Arithmetic {
 
@@ -102,11 +105,14 @@ public class PolynomialArithmetic implements Arithmetic {
         int higherDegreeP1 = p1.getHigherDegree();
         int higherDegreeP2 = p2.getHigherDegree();
 
-        if (higherDegreeP2 > higherDegreeP1)
+        if(p2.getHigherDegree() == 0){
+            result = divideByScalar(p1, p2.getTerms().get(p2.getHigherDegree()).getCoeff());
+            finalResult.put("result", result);
             return finalResult;
+        }
 
         double coeffP2 = p2.getTerms().get(higherDegreeP2).getCoeff();
-        if (coeffP2 > 1) {
+        if (coeffP2 != 0) {
             p2 = divideByScalar(p2, coeffP2);
         }
 
@@ -206,11 +212,18 @@ public class PolynomialArithmetic implements Arithmetic {
     }
 
     private Polynomial divideByScalar(Polynomial polynomial, double value) {
-        Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<Integer, Monomial> entry = iterator.next();
-            double coeff = entry.getValue().getCoeff();
-            entry.getValue().setCoeff(coeff / value);
+        try {
+            if (value == 0) {
+                throw new ArithmeticException("Error: Division by zero");
+            }
+            Iterator<Map.Entry<Integer, Monomial>> iterator = polynomial.getTerms().entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, Monomial> entry = iterator.next();
+                double coeff = entry.getValue().getCoeff();
+                entry.getValue().setCoeff(coeff / value);
+            }
+        } catch (ArithmeticException e) {
+            System.err.println("Error: Division by zero");
         }
         return polynomial;
     }

@@ -4,6 +4,7 @@ import org.polycalc.globals.Variable;
 import org.polycalc.model.Monomial;
 import org.polycalc.model.Polynomial;
 import org.polycalc.operations.api.Transformation;
+import org.polycalc.ui.service.OperationsHandling;
 import org.polycalc.util.SuperScript;
 
 import java.util.Iterator;
@@ -14,24 +15,24 @@ import java.util.regex.Pattern;
 public class PolynomialTransformation implements Transformation {
 
 //      The pattern was tested on this input
-//      Matcher matcher = pattern.matcher("-323x+ 12.1x^ + dfx^4 + 2x  ^8 - x + 1 +5 -0 +43.1x^  9 -23.5x + 32c -   3x ");
+//      "-323x+ 12.1x^ + dfx^4 + 2x  ^8 - x + 1 +5 -0 +43.1x^  9 -23.5x + 32c -   3x "
     @Override
     public Polynomial parse(String input) {
 
-
-        String regExPattern = "([-+]?\\s*\\d*\\.?\\d*X\\s*\\^*\\s*[1-9]*)|(\\b[1-9]+\\b)|([+-]\\s*[0-9]+)";
-        Pattern pattern = Pattern.compile(regExPattern, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(input);
+        input = input.replaceAll("\\s", "");
+        String polynomialIdentifier = "([-+]?\\s*\\d*\\.?\\d*X\\s*\\^*\\s*[1-9]*)|(\\b[1-9]+\\b)|([+-]\\s*[0-9]+)";
+        Pattern monomialParser = Pattern.compile(polynomialIdentifier, Pattern.CASE_INSENSITIVE);
+        Matcher monomial = monomialParser.matcher(input);
 
         Polynomial polynomial = new Polynomial();
         Variable variable = polynomial.getVariable();
 
-        while (matcher.find()) {
+        while (monomial.find()) {
 
             Double coefficient = 1.0;
             int exponent = 1;
 
-            String match = matcher.group();
+            String match = monomial.group();
             if (match.contains("x")) {
                 String noSpaceMatch = match.replaceAll("\\s", "");
                 String[] splitMatch = noSpaceMatch.split("x");
@@ -43,7 +44,6 @@ public class PolynomialTransformation implements Transformation {
                         // handle the case that it has only a positive sign
                     } else if (splitMatch[0].matches("[+-]?(?:\\d*\\.?\\d+)")) {
                         coefficient = Double.parseDouble(splitMatch[0]);
-                        // check whether it contains only negative sign
                     }
                 }
 
@@ -77,7 +77,7 @@ public class PolynomialTransformation implements Transformation {
 
     @Override
     public String convertToString(Polynomial polynomial) {
-        if (polynomial.getTerms().isEmpty()) {
+        if (polynomial == null || polynomial.getTerms().isEmpty()) {
             return "";
         }
 
@@ -92,6 +92,7 @@ public class PolynomialTransformation implements Transformation {
             int expo = monomial.getExpo();
 
             if (coeff == 0) {
+                monomial = iterator.hasNext() ? iterator.next().getValue() : null;
                 continue;
             } else if (coeff == 1 && expo == 1) {
                 result.append(variable.getName());
