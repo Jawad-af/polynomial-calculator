@@ -24,7 +24,7 @@ public class PolynomialTransformation implements Transformation {
         Matcher monomial = monomialParser.matcher(input);
 
         Polynomial polynomial = new Polynomial();
-        Variable variable = polynomial.getVariable();
+        Variable variable = Variable.getInstance();
 
         while (monomial.find()) {
 
