@@ -4,7 +4,6 @@ import org.polycalc.globals.Variable;
 import org.polycalc.model.Monomial;
 import org.polycalc.model.Polynomial;
 import org.polycalc.operations.api.Transformation;
-import org.polycalc.ui.service.OperationsHandling;
 import org.polycalc.util.SuperScript;
 
 import java.util.Iterator;

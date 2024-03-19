@@ -7,11 +7,8 @@ import org.polycalc.operations.service.PolynomialArithmetic;
 import org.polycalc.operations.service.PolynomialTransformation;
 import org.polycalc.operations.type.OperationType;
 import javax.swing.JOptionPane;
-
-import javax.swing.*;
+;
 import java.util.HashMap;
-
-import static java.lang.System.exit;
 import static org.polycalc.operations.type.OperationType.*;
 
 public class OperationsHandling {
@@ -83,13 +80,6 @@ public class OperationsHandling {
 
         return output;
     }
-
-//    public void displayError(String toBeDisplayed) {
-//        JTextField textField = new JTextField();
-//        textField.setText(toBeDisplayed);
-//        exit(1);
-//    }
-//
 
     public void displayError(String toBeDisplayed) {
         JOptionPane.showMessageDialog(null, toBeDisplayed, "Error", JOptionPane.ERROR_MESSAGE);

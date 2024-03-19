@@ -31,30 +31,28 @@ class PolyOperationsTest {
         p2 = new Polynomial();
     }
 
-//    @Test
-//    void add_additionalCase1() {
-//        Polynomial p1 = new Polynomial();
-//        Polynomial p2 = new Polynomial();
-//
-//        // 4x^3 + 2x^2 - 5
-//        p1.getTerms().put(3, new Monomial(4, 3));
-//        p1.getTerms().put(2, new Monomial(2, 2));
-//        p1.getTerms().put(0, new Monomial(-5, 0));
-//
-//        // -2x^2 + 3x + 1
-//        p2.getTerms().put(2, new Monomial(-2, 2));
-//        p2.getTerms().put(1, new Monomial(3, 1));
-//        p2.getTerms().put(0, new Monomial(1, 0));
-//
-//        Polynomial result = arithmetic.add(p1, p2);
-//        String expected = "4.0X\u00B3 +3.0X -4.0";
-//        String actual = transformation.convertToString(result);
-//
-//        assertEquals(expected, actual);
-//    }
+    @Test
+    void additionCase0() {
+
+        // 4x^3 + 2x^2 - 5
+        p1.getTerms().put(3, new Monomial(4, 3));
+        p1.getTerms().put(2, new Monomial(2, 2));
+        p1.getTerms().put(0, new Monomial(-5, 0));
+
+        // -2x^2 + 3x + 1
+        p2.getTerms().put(2, new Monomial(-2, 2));
+        p2.getTerms().put(1, new Monomial(3, 1));
+        p2.getTerms().put(0, new Monomial(1, 0));
+
+        Polynomial result = arithmetic.add(p1, p2);
+        String expected = "4.0X\u00B3 +3.0X -4.0";
+        String actual = transformation.convertToString(result);
+
+        assertEquals(expected, actual);
+    }
 
     @Test
-    void add_additionalCase2() {
+    void additionCase1() {
 
         // 2x^2 - 3x + 4
         p1.getTerms().put(2, new Monomial(2, 2));
@@ -74,7 +72,7 @@ class PolyOperationsTest {
     }
 
     @Test
-    void subtract_additionalCase0() {
+    void subtractionCase0() {
 
         // 2X^3 - X + 12
         p1.getTerms().put(3, new Monomial(2, 3));
@@ -95,7 +93,7 @@ class PolyOperationsTest {
     }
 
     @Test
-    void subtract_additionalCase1() {
+    void subtractionCase1() {
 
         // 4x^3 + 2x^2 - 5
         p1.getTerms().put(3, new Monomial(4, 3));
@@ -115,7 +113,7 @@ class PolyOperationsTest {
     }
 
     @Test
-    void subtract_additionalCase2() {
+    void subtractionCase2() {
 
         // 2x^2 - 3x + 4
         p1.getTerms().put(2, new Monomial(2, 2));
@@ -135,7 +133,7 @@ class PolyOperationsTest {
     }
 
     @Test
-    void subtract_additionalCase3() {
+    void subtractionCase3() {
 
         // 2X^3 - X + 12
         p1.getTerms().put(3, new Monomial(2, 3));
@@ -156,7 +154,7 @@ class PolyOperationsTest {
     }
 
     @Test
-    void multiply_additionalCase0() {
+    void multiplication0() {
 
         // 2x^2-3x^3+2
         p1.getTerms().put(2, new Monomial(2, 2));
@@ -176,7 +174,7 @@ class PolyOperationsTest {
     }
 
     @Test
-    void multiply_additionalCase1() {
+    void multiplication1() {
 
         // 4x^3 + 2x^2 - 5
         p1.getTerms().put(3, new Monomial(4, 3));
@@ -195,7 +193,7 @@ class PolyOperationsTest {
     }
 
     @Test
-    void multiply_additionalCase2() {
+    void multiplication2() {
 
         // -3x^2 + 5x - 7
         p1.getTerms().put(2, new Monomial(-3, 2));

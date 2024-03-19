@@ -1,8 +1,6 @@
 package org.polycalc.model;
 
 import org.polycalc.globals.Variable;
-import org.polycalc.util.SuperScript;
-
 import java.util.*;
 
 public class Polynomial {
@@ -17,6 +15,10 @@ public class Polynomial {
 
     public NavigableMap<Integer, Monomial> getTerms() {
         return terms;
+    }
+
+    public Variable getVariable() {
+        return terms.firstEntry().getValue().getVar();
     }
 
 }
